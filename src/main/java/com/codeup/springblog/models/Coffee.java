@@ -1,11 +1,24 @@
 package com.codeup.springblog.models;
 
 
-import java.io.Serializable;
+import javax.persistence.*;
 
+@Entity
+@Table (name="coffees")
 public class Coffee  {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(nullable = false, length = 50)
     private String roast;
+
+    @Column(nullable = false )
     private String origin;
+
+    @Column(nullable = true,length = 100)
     private String brand;
 
     public String getBrand() {
@@ -15,7 +28,11 @@ public class Coffee  {
     public void setBrand(String brand) {
         this.brand = brand;
     }
-
+    public Coffee(String roast, String origin, String brand) {
+        this.roast = roast;
+        this.origin = origin;
+        this.brand = brand;
+    }
     public Coffee() {
     }
 
