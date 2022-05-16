@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Roll'em!</title>
+</head>
+<body>
+<h1>Take a Guess and Roll!</h1>
+<h2>Pick your Number:</h2>
+<ul>
+    <li><a href="/roll-dice/1">I pick 1</a></li>
+    <li><a href="/roll-dice/2">I pick 2</a></li>
+    <li><a href="/roll-dice/3">I pick 3</a></li>
+    <li><a href="/roll-dice/4">I pick 4</a></li>
+    <li><a href="/roll-dice/5">I pick 5</a></li>
+    <li><a href="/roll-dice/6">I pick 6</a></li>
+</ul>
+
+<h2 th:if="${roll}">You selected <span th:text="${roll}"></span></h2>
+
+<h3 th:if="${roll}==${pick}">Congratulations the number was <span th:text="${pick}"  > </span> and you picked <span th:text="${roll}"></span></h3>
+    <br>
+
+    <br>
+<h3 th:if="${roll}!=${pick}">Sorry the number was <span th:text="${pick}"></span>! Try again </h3>
+
+
+</body>
+</html>
