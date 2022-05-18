@@ -1,52 +1,57 @@
 package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.Post;
+import com.codeup.springblog.repositories.PostRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
 public class PostController {
 
+    private final PostRepository postsDao;
 
+    public PostController(PostRepository postDao){
+        this.postsDao=postDao;
+    }
 
     @GetMapping()
     public String allPosts(Model model){
-        Post post1=new Post("first post", "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad architecto blanditiis cupiditate dolor dolore eligendi eveniet, ex fuga illo incidunt labore nam natus numquam qui quis, quo sed tempore! Amet.");
-        Post post2= new Post("second post","Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad architecto blanditiis cupiditate dolor dolore eligendi eveniet, ex fuga illo incidunt labore nam natus numquam qui quis, quo sed tempore! Amet.");
-        ArrayList<Post> posts=new ArrayList<>();
-        posts.add(post1);
-        posts.add(post2);
-        model.addAttribute("posts",posts);
 
+        List<Post> posts = postsDao.findAll();
+        model.addAttribute("posts", posts);
+        return "posts/index";
 
-
-        return"posts/index";
     }
 
+    @GetMapping("/{id}")
+    public String ShowOnePost(@PathVariable long id,Model model){
 
+      Post  post=postsDao.findById(id);
 
-
-    @GetMapping("/{title}")
-    public String ShowOnePost(@PathVariable String title,Model model){
-        Post newPost= new Post(title,"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad architecto blanditiis cupiditate dolor dolore eligendi eveniet, ex fuga illo incidunt labore nam natus numquam qui quis, quo sed tempore! Amet.");
-        model.addAttribute("post",newPost);
+      model.addAttribute("post",post);
 
         return "posts/show";
     }
 
     @GetMapping("/create")
-    @ResponseBody
+
     public String showForm(){
-        return "view form for creating a post";
+        return "posts/create";
     }
+
+
     @PostMapping("/create")
-    @ResponseBody
-    public String create(){
-        return "create post";
+
+    public String create(@RequestParam("title")String title,@RequestParam("body")String body){
+        Post post=new Post(title,body);
+        postsDao.save(post);
+
+        return "redirect:/posts";
     }
 
 
