@@ -8,8 +8,12 @@
 <div th:replace="partials/partials.html :: header"></div>
 
 <div th:each="post:${posts}">
-    <h2 th:text="${post.getTitle()}"></h2>
-    <p th:text="${post.getBody()}"></p>
+    <h2 th:text="${post.title}"></h2>
+    <ul>
+    <li th:if="${post.getTags()}" th:each="tag:${post.tags}" th:text="${tag.name}"></li>
+    </ul>
+    <p th:text="${post.body}"></p>
+        <a th:href="@{/posts/{id}(id=${post.id})}">View me</a>
 
 </div>
 <div th:replace="partials/partials.html :: footer"></div>

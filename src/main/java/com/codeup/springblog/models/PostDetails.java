@@ -18,6 +18,16 @@ public class PostDetails {
     private String topicDescription;
 
 
+    public PostDetails(boolean isAwesome, String historyOfPost, String topicDescription) {
+        this.isAwesome = isAwesome;
+        this.historyOfPost = historyOfPost;
+        this.topicDescription = topicDescription;
+    }
+
+    public PostDetails() {
+
+    }
+
     public long getId() {
         return id;
     }

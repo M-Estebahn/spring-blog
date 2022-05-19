@@ -13,13 +13,20 @@ public class Post {
     private String title;
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private PostDetails postDetails;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
     private List<PostImage> post_images;
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name="post_tags",
+            joinColumns={@JoinColumn(name="post_id")},
+            inverseJoinColumns={@JoinColumn(name="tag_id")}
+    )
+    private List<Tag> tags;
 
 
 
@@ -78,5 +85,13 @@ public class Post {
 
     public void setPost_images(List<PostImage> post_images) {
         this.post_images = post_images;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }
