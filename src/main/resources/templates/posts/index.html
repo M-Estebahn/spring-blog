@@ -14,7 +14,9 @@
     </ul>
     <p th:text="${post.body}"></p>
         <a th:href="@{/posts/{id}(id=${post.id})}">View me</a>
-
+    <form th:action="@{/posts/delete}" th:method="post">
+    <button type="submit" name="id" th:value="${post.id}">Delete me</button>
+    </form>
 </div>
 <div th:replace="partials/partials.html :: footer"></div>
 <script th:replace="partials/partials.html :: bootstrap-js"></script>

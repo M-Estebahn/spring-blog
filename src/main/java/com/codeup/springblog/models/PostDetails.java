@@ -9,8 +9,9 @@ public class PostDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
+    @Column(columnDefinition = "boolean")
     private boolean isAwesome;
+
     @Column(columnDefinition = "text")
     private String historyOfPost;
 

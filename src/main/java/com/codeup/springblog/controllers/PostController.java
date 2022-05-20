@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -36,6 +37,12 @@ public class PostController {
 
         Post post = postsDao.findById(id);
 
+        PostDetails pd= new PostDetails();
+
+        if(post.getPostDetails()!=null){
+            pd= post.getPostDetails();
+        }
+        model.addAttribute("postDetails",pd);
         model.addAttribute("post", post);
 
         return "posts/show";
@@ -43,34 +50,28 @@ public class PostController {
 
     @GetMapping("/create")
 
-    public String showForm() {
+    public String showForm(Model model) {
+
+        model.addAttribute("post",new Post());
+
         return "posts/create";
     }
 
 
     @PostMapping("/create")
 
-    public String create(@RequestParam("title") String title, @RequestParam("body") String body) {
+    public String create(@ModelAttribute Post post) {
         User user = userDao.getUserById(1);
-        Post post = new Post(title, body);
         post.setUser(user);
         postsDao.save(post);
 
         return "redirect:/posts";
     }
 
-//    @GetMapping("/details/{id}")
-//    public String getHistoryOfDetails(@PathVariable long id,Model model){
-//        Post post=postsDao.findById(id);
-//        PostDetails postDetails=post.getPostDetails();
-//        model.addAttribute("post",post);
-//        model.addAttribute("postDeets",postDetails);
-//
-//        return("posts/history");
-//    }
+
 
     @PostMapping("/img/update/{id}")
-    public String updateImg(@PathVariable long id, @RequestParam("post-image") String url, @RequestParam("title") String title) {
+    public String updateImg(@PathVariable long id, @RequestParam("post-image") String url, @RequestParam("image-title") String title) {
 
         Post post = postsDao.findById(id);
 
@@ -89,35 +90,13 @@ public class PostController {
 
     @PostMapping("/details/update/{id}")
     public String updateDetails(@PathVariable long id,
-                                @RequestParam("isAwesome") boolean isAwesome,
-                                @RequestParam("history") String history,
-                                @RequestParam("topic") String topic) {
+                                @ModelAttribute PostDetails postDetails){
 
         Post post = postsDao.findById(id);
-
-        if (post.getPostDetails() != null) {
-            PostDetails pd = post.getPostDetails();
-
-            pd.setAwesome(isAwesome);
-            pd.setHistoryOfPost(history);
-            pd.setTopicDescription(topic);
-
-            post.setPostDetails(pd);
+        post.setPostDetails(postDetails);
 
             postsDao.save(post);
 
-        }
-        if (post.getPostDetails() == null) {
-            PostDetails pd = new PostDetails();
-
-            pd.setAwesome(isAwesome);
-            pd.setHistoryOfPost(history);
-            pd.setTopicDescription(topic);
-
-            post.setPostDetails(pd);
-
-            postsDao.save(post);
-        }
         return ("redirect:/posts/" + id);
     }
 
@@ -128,12 +107,36 @@ public class PostController {
     }
 
     @PostMapping("/search-tag")
-    public String searchResultsTag(@RequestParam(name = "tag") String tag, Model model) {
+    public String searchResultsTag(@RequestParam(name = "tag") String tagsearch, Model model) {
 
+        List<Post> posts= postsDao.findAll();
+        List<Post> newPosts= new ArrayList<>();
+        for (Post post:posts) {
+            if(post.getTags()!=null){
+                List<Tag> tagsList=post.getTags();
+                for (Tag tag:tagsList) {
+                    if(tag.getName().equalsIgnoreCase(tagsearch)){
 
+                        newPosts.add(post);
+                        model.addAttribute("posts",newPosts );
+                    }
+                }
+            }
 
-        model.addAttribute("posts" );
+        }
+
         return "posts/index";
+
+    }
+    @PostMapping("/delete")
+    public String deletePost(@RequestParam("id")long id){
+        postsDao.deleteById(id);
+        return ("redirect:/posts");
+    }
+    @PostMapping("/update")
+    public String updatePost(@ModelAttribute Post post){
+        postsDao.save(post);
+        return ("redirect:/posts");
 
     }
 

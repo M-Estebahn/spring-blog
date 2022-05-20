@@ -14,6 +14,7 @@ public interface PostRepository extends JpaRepository <Post,Long> {
      @Query(" from Post p where p.title like %:term%")
     List<Post> searchByTitleLike(@Param("term") String term);
 
-//     Post findBy
+     @Query("from Tag t where t.name like %:term%")
+    List<Tag> searchByTagLike(@Param("term") String term);
 
 }

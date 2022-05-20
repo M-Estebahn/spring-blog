@@ -6,34 +6,8 @@
 <nav th:replace="partials/partials.html :: navbar"></nav>
 <div th:replace="partials/partials.html :: header"></div>
 
-<fieldset class="text-center">
-    <legend>Add an image</legend>
-    <form th:action="@{/posts/img/update/{id}(id=${post.id})}" th:method="post">
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title">
-        <br>
-        <label for="post-image">Body</label>
-        <textarea  id="post-image" name="post-image"></textarea>
-        <input type="submit" value="submit">
-    </form>
-    <br>
-    <legend>Edit/Add details</legend>
-    <form th:action="@{/posts/details/update/{id}(id=${post.id})}" th:method="post">
-        <label for="history">History</label>
-        <input type="text" id="history" name="history">
-        <br>
-        <label for="topic">topic</label>
-        <textarea  id="topic" name="topic"></textarea>
-        <br>
-        <label for="isAwesome">Is Awesome</label>
-        <input type="radio" id="isAwesome" name="isAwesome" value="true">
-        <br>
-        <label for="isNotAwesome">Is Not Awesome</label>
-        <input type="radio" id="isNotAwesome" name="isAwesome" value="false">
-        <br>
-        <input type="submit" value="submit">
-    </form>
-</fieldset>
+
+<div class="container d-flex flex-column">
     <h2 th:text="${post.title}"></h2>
         <div th:if="${post.getTags()}">
             <ul >
@@ -56,7 +30,54 @@
                 <img  alt="pic"  th:src="${pic.url}">
             </div>
             </div>
+</div>
+<fieldset class="d-flex col-12">
+    <div class="col-12 col-lg-4 ">
+        <h2>Add an image</h2>
+        <form th:action="@{/posts/img/update/{id}(id=${post.id})}" th:method="post">
+            <label class="form-label" for="title">Title</label>
+            <input class="form-control" type="text" id="image-title" name="title">
+            <br>
+            <label class="form-label" for="post-image">Body</label>
+            <textarea class="form-control"  id="post-image" name="post-image"></textarea>
+            <input type="submit" value="submit">
+        </form>
+    </div>
+    <br>
+    <div class="col-12 col-lg-4">
+        <h2>Edit/Add details</h2>
+        <form class="form-control" th:action="@{/posts/details/update/{id}(id=${post.id})}" th:method="post" th:object="${postDetails}" >
+                    <label class="form-label" for="history">History</label>
+                    <input class="form-control" type="text" id="history" th:field="*{historyOfPost}">
+                    <br>
+                    <label class="form-label" for="topic">topic</label>
+                    <textarea class="form-control" id="topic" th:field="*{topicDescription}"></textarea>
+                    <br>
+                    <label class="form-check-label" for="isAwesome">Is Awesome</label>
+                    <input class="form-check-input" type="radio" id="isAwesome" th:field="*{Awesome}" value="true">
+                    <label class="form-check-label" for="isAwesome">Is Awesome</label>
+                    <input class="form-check-input" type="radio" id="isNotAwesome" th:field="*{Awesome}" value="false">
+                    <br>
+                    <input type="submit" value="submit">
+                </form>
+            </div>
 
+
+        </form>
+    </div>
+    <br>
+    <div class="col-12 col-lg-4">
+        <h2>Edit the Post</h2>
+        <form th:action="@{/posts/update}" th:method="post" th:field="${post}" class="form-control">
+            <input type="hidden" name="id" th:value="*{post.id}">
+            <label for="title" class="form-label">Title</label>
+            <input class="form-control" type="text" id="title" th:field="*{post.title}">
+            <label for="body" class="form-label">Body</label>
+            <textarea class="form-control" type="text" id="body" th:field="*{post.body}"></textarea>
+            <input type="submit" value="submit">
+        </form>
+    </div>
+</fieldset>
 <footer th:replace="partials/partials.html :: footer"></footer>
 
 <script th:replace="partials/partials.html :: bootstrap-js"></script>
