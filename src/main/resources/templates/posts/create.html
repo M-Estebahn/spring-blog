@@ -6,6 +6,9 @@
     <title>Title</title>
 </head>
 <body>
+<nav th:replace="partials/partials.html :: navbar"></nav>
+
+<div th:replace="partials/partials.html :: header"></div>
 <fieldset>
   <h2>Add a Post</h2>
   <form th:action="@{/posts/create}" th:method="post" th:field="${post}" class="form-control">
@@ -16,5 +19,8 @@
     <input type="submit" value="submit">
   </form>
 </fieldset>
+<footer th:replace="partials/partials.html :: footer"></footer>
+
+<script th:replace="partials/partials.html :: bootstrap-js"></script>
 </body>
 </html>

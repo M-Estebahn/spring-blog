@@ -24,10 +24,9 @@
             <div th:if="${post.getUser()}">
                 <p th:text="${post.user.email}"></p>
             </div>
-            <div th:if="${post.getPost_images()}">
-            <div th:each="pic:${post.post_images} ">
-
-                <img  alt="pic"  th:src="${pic.url}">
+            <div class="d-flex flex-row" th:if="${post.getPost_images()}">
+            <div  th:each="pic:${post.post_images} ">
+                <img class="col-4 align-self-baseline"  alt="pic"  th:src="${pic.url}">
             </div>
             </div>
 </div>
@@ -36,7 +35,7 @@
         <h2>Add an image</h2>
         <form th:action="@{/posts/img/update/{id}(id=${post.id})}" th:method="post">
             <label class="form-label" for="title">Title</label>
-            <input class="form-control" type="text" id="image-title" name="title">
+            <input class="form-control" type="text" id="image-title" name="image-title">
             <br>
             <label class="form-label" for="post-image">Body</label>
             <textarea class="form-control"  id="post-image" name="post-image"></textarea>

@@ -3,6 +3,8 @@ package com.codeup.springblog.controllers;
 import com.codeup.springblog.models.*;
 import com.codeup.springblog.repositories.PostRepository;
 import com.codeup.springblog.repositories.UserRepository;
+import com.codeup.springblog.services.EmailService;
+import com.codeup.springblog.services.StringService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,17 +18,22 @@ public class PostController {
 
     private final PostRepository postsDao;
     private final UserRepository userDao;
+    private StringService stringService;
+    private EmailService emailService;
 
 
-    public PostController(PostRepository postDao, UserRepository userDao) {
+    public PostController(PostRepository postDao, UserRepository userDao,StringService stringService,EmailService emailService) {
         this.postsDao = postDao;
         this.userDao = userDao;
+        this.stringService=stringService;
+        this.emailService=emailService;
     }
 
     @GetMapping()
     public String allPosts(Model model) {
 
         List<Post> posts = postsDao.findAll();
+        model.addAttribute("stringService",stringService);
         model.addAttribute("posts", posts);
         return "posts/index";
 
@@ -64,6 +71,8 @@ public class PostController {
         User user = userDao.getUserById(1);
         post.setUser(user);
         postsDao.save(post);
+        emailService.prepareAndSend(post,post.getTitle(),post.getBody());
+
 
         return "redirect:/posts";
     }
@@ -110,13 +119,14 @@ public class PostController {
     public String searchResultsTag(@RequestParam(name = "tag") String tagsearch, Model model) {
 
         List<Post> posts= postsDao.findAll();
+
         List<Post> newPosts= new ArrayList<>();
+
         for (Post post:posts) {
             if(post.getTags()!=null){
                 List<Tag> tagsList=post.getTags();
                 for (Tag tag:tagsList) {
                     if(tag.getName().equalsIgnoreCase(tagsearch)){
-
                         newPosts.add(post);
                         model.addAttribute("posts",newPosts );
                     }
