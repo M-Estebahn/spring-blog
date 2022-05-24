@@ -34,6 +34,12 @@ public class Post {
 
     public Post(){};
 
+    public Post(String title, String body, User user) {
+        this.title=title;
+        this.body=body;
+        this.user=user;
+    }
+
     public User getUser() {
         return user;
     }

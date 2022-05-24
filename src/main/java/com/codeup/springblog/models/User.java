@@ -23,6 +23,7 @@ public class User {
 
     public User() {
     }
+
     public User(User copy) {
         id = copy.id; // This line is SUPER important! Many things won't work if it's absent
         email = copy.email;
@@ -58,7 +59,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = Password.hash(password);
+        this.password=password;
     }
 
     public List<Post> getPosts() {
